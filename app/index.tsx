@@ -1,8 +1,16 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Link, Stack } from "expo-router";
+import { Link, Redirect, Stack } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/state/store";
 
-export default function PreGameScreen() {
+export default () => {
+  const { user } = useSelector((state: RootState) => state.user);
+
+  if (user == null) {
+    return <Redirect href="/auth/sign-in" />;
+  }
+
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -16,7 +24,7 @@ export default function PreGameScreen() {
       </Link>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
