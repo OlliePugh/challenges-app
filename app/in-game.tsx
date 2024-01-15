@@ -1,14 +1,18 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-
-import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
 import Camera from "../components/Camera";
-import { Stack } from "expo-router";
+import { Stack, useNavigation } from "expo-router";
+import { useDispatch } from "react-redux";
+import { uploadVideos } from "../redux/slices/challengeVideoSlice";
+import { Action, ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "../redux/state/store";
+import { useState } from "react";
 
 export default function InGameScreen() {
-  const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const dispatch: ThunkDispatch<RootState, void, Action> = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -28,7 +32,10 @@ export default function InGameScreen() {
       </View>
       <TouchableOpacity
         style={styles.doneButton}
-        onPress={() => setModalVisible(!modalVisible)}
+        onPress={() => {
+          dispatch(uploadVideos());
+          navigation.goBack();
+        }}
       >
         <Text style={styles.doneButtonText}>Done</Text>
       </TouchableOpacity>
