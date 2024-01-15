@@ -4,7 +4,9 @@ import { Link, Redirect, Stack } from "expo-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/state/store";
 import Camera from "../components/Camera";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import * as FileSystem from "expo-file-system";
+import { auth } from "../firebase/firebase";
 
 export default () => {
   const [inGame, setInGame] = useState(false);
@@ -13,8 +15,26 @@ export default () => {
 
   const processVideos = async () => {
     const uris = (await Promise.all(videos)).map((x) => x.uri); // all videos saved to drive
-    console.log(uris);
+
     setVideos([]);
+    uris.forEach(async (uri) => {
+      try {
+        const result = await FileSystem.uploadAsync(
+          "http://192.168.1.85:5001/challenges-8d7aa/us-central1/uploadVideo",
+          uri,
+          {
+            headers: {
+              Authorization: await auth.currentUser!.getIdToken(),
+            },
+            fieldName: "file",
+            uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+          }
+        );
+        console.log(result.body);
+      } catch (e) {
+        console.error(e);
+      }
+    });
   };
 
   if (user == null) {
