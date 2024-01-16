@@ -3,10 +3,10 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "start": "set NODE_ENV=development&& expo start",
+    "android": "set NODE_ENV=development&& expo start --android",
+    "ios": "set NODE_ENV=development&& expo start --ios",
+    "web": "set NODE_ENV=development&& expo start --web",
     "test": "jest --watchAll"
   },
   "jest": {
